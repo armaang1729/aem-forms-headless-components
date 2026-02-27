@@ -37,18 +37,43 @@ function listRepoFiles(dir, prefix = '', maxFiles = 200) {
   return files;
 }
 
+function loadConstitution() {
+  const constitutionPath = path.join(REPO_ROOT, '.specify', 'memory', 'constitution.md');
+  try {
+    if (fs.existsSync(constitutionPath)) return fs.readFileSync(constitutionPath, 'utf8').trim();
+  } catch (_) {}
+  return '';
+}
+
 function buildPrompt(fileList) {
-  return `You are an expert developer. A GitHub issue was opened for this repo. Your job is to produce a minimal fix.
+  const constitution = loadConstitution();
+  const fileListStr = fileList.slice(0, 80).join(', ');
 
-Issue #${ISSUE_NUMBER}
-Title: ${ISSUE_TITLE}
+  return `## Your role
+You are a senior software engineer and expert in:
+- **React**: hooks (useState, useEffect, useCallback, useMemo), component patterns, TypeScript/JSX, avoiding stale closures and unnecessary re-renders.
+- **Headless / adaptive forms**: form state, validation, rule engines, and headless UI patterns (e.g. AEM Headless Adaptive Forms).
+- **Code quality**: minimal edits, existing style and patterns, safe defaults, and clear commit messages.
 
-Description:
+## Project context
+This repo is **aem-forms-headless-components**: React and React Native packages for Headless Adaptive Forms. Packages live under \`packages/\` (e.g. react-vanilla-components, react-native-components). Match the project's existing structure, naming, and patterns.
+
+${constitution ? `## Project principles\n${constitution}\n` : ''}
+
+## Task
+A GitHub issue was opened. Produce a **minimal fix** that addresses it.
+
+**Issue #${ISSUE_NUMBER}**  
+**Title:** ${ISSUE_TITLE}
+
+**Description:**
 ${ISSUE_BODY}
 
-Relevant files in the repo (path only): ${fileList.slice(0, 80).join(', ')}
+**Relevant repo files (path only):** ${fileListStr}
 
-Respond with a single JSON object and nothing else. No markdown, no code fence.
+## Output format
+Respond with a **single JSON object only**. No markdown, no code fence, no extra text.
+
 Use this exact shape:
 {
   "skip": false,
@@ -60,11 +85,11 @@ Use this exact shape:
   ]
 }
 
-Rules:
-- If you cannot determine a safe fix from the issue alone, set "skip": true and set "reason" to a short message for the user.
-- Only include files that need to be changed. "path" must be relative to repo root. Use "content" for the entire new file content.
-- commitMessage should reference the issue and be concise.
-- Keep changes minimal and match existing code style.`;
+## Rules
+- If you cannot determine a safe fix from the issue and file list, set "skip": true and set "reason" to a short, actionable message for the user (e.g. what's missing or ambiguous).
+- Only include files that need to be changed. "path" must be relative to repo root. "content" must be the **entire** new file content.
+- commitMessage: start with "Fix:" or "Add:" etc., be concise, and include "(#${ISSUE_NUMBER})".
+- Keep changes minimal: fix only what the issue asks; preserve existing style, indentation, and patterns; do not refactor or add features unless the issue requests them.`;
 }
 
 async function callLLM(prompt) {

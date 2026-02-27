@@ -102,7 +102,7 @@ if: (github.event.action == 'labeled' && contains(github.event.label.name, 'auto
 
 ## Development
 
-- **Autofix agent**: `agent/index.mjs` – runs in GitHub Actions, reads env (issue, API key), calls the LLM, writes file changes and metadata.
+- **Autofix agent**: `agent/index.mjs` – runs in GitHub Actions, reads env (issue, API key), calls the LLM with a senior-dev/React/headless-aware prompt (and optional constitution from `.specify/memory/constitution.md`), writes file changes and metadata.
 - **Review agent**: `agent/review.mjs` – analyzes PR diffs and generates review suggestions.
 - **Autofix workflow**: `.github/workflows/autofix-on-issue.yml` – checkout, run agent, commit, push, open PR or comment on issue.
 - **Review workflow**: `.github/workflows/review-pr.yml` – fetches PR diff, runs review agent, posts review comment.

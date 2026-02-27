@@ -16,6 +16,13 @@ This document codifies how this repo is developed and how the autofix agent shou
 - **Safe by default**: Do not refactor unrelated code or add features not requested in the issue.
 - **Transparency**: If the agent cannot fix an issue from the given context, it should say so (e.g., via a comment on the issue) rather than guess.
 
+## Domain expertise (for the agent)
+
+When editing this codebase, apply senior-level knowledge of:
+
+- **React**: Correct use of hooks (dependencies for useCallback/useEffect/useMemo), component composition, TypeScript types, and avoiding debug leftovers (e.g. stray `console.log`).
+- **Headless adaptive forms**: Form state, validation, rule engines, and the existing patterns in `packages/react-vanilla-components` and `packages/react-native-components`.
+
 ## Tech and tooling
 
 - The autofix pipeline runs in GitHub Actions.
