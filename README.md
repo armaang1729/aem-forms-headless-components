@@ -1,47 +1,26 @@
-# Introduction
+# Project Overview
 
-This repository provides components for [Headless Adaptive Forms](https://experienceleague.adobe.com/docs/experience-manager-headless-adaptive-forms/using/overview.html?lang=en). You can use these packages with a React or React Native application.
+This repository contains modern agent-based tooling for code review and autofixes. It includes agents that automate tasks like code improvement and peer review.
 
-## Versions
+## Agents
 
-Node > 16.X<br/>
-NPM > v8.3.1
+We use specialized agents in this project to automate code tasks:
 
-The steps in this guide are tested against the above versions only. 
-If your version is different then please try to upgrade or log an issue to see if that version can be supported.
+- **Autofix Agent:** Automatically suggests and makes improvements to code based on defined rules.
+- **Review Agent:** Checks code for best practices and reviews pull requests.
 
-# Development
+For an in-depth explanation of each agent, their capabilities, and usage examples, please refer to the [Agent README](./README-autofix-agent.md).
+
+## Directory Structure
+
+- `agent/` – Core agent implementations
+- `examples/` – Example React and React Native apps
 
 ## Getting Started
 
-Our recommendation is to use [Node Version Manager](https://github.com/nvm-sh/nvm) so that you can manage multiple
-installation of Node/NPM
+1. Clone the repo and install dependencies
+2. See the [Agent README](./README-autofix-agent.md) for more details about the agents
 
-### Clone the repository
+## License
 
-Use `git clone https://github.com/adobe/aem-forms-headless-components` command to clone the repository.
-
-### Bootstrap
-
-Once you have cloned this repository and run the following command at the root directory of this project 
-
-```
-npm install
-npx lerna bootstrap
-```
-
-### Build
-
-```
-npx lerna run build
-```
-
-### Tests
-
-```
-npx lerna run test
-```
-
-# Contributing
-
-Please raise an issue and a PR.
+This project is licensed under the MIT License.
